@@ -1,5 +1,3 @@
-// ./src/middleware.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/prismicio";
 
@@ -36,7 +34,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(`/${matchedLocale}${pathname}`, request.url)
     );
-  } else {
+  } else if (pathnameIsMissingLocale) {
     return NextResponse.rewrite(
       new URL(`/${matchedLocale}${pathname}`, request.url)
     );
