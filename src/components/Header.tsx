@@ -1,4 +1,7 @@
-const Header = async () => {
+import { getLocales } from "@/utils/getLocale";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+
+const Header = async ({ lang }: { lang: string }) => {
   return (
     <header className="flex justify-between items-center p-4 border-b border-gray-300">
       {/* Logo on the left */}
@@ -31,6 +34,7 @@ const Header = async () => {
           </li>
         </ul>
       </nav>
+      <LanguageSwitcher locales={await getLocales()} lang={lang} />
     </header>
   );
 };

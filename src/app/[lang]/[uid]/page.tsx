@@ -1,6 +1,6 @@
 import { createClient } from "@/prismicio";
-import { getLocales } from "@/utils/getLocale";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+// import { getLocales } from "@/utils/getLocale";
+// import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import Image from "next/image";
 
 interface BlogPostProps {
@@ -10,16 +10,15 @@ interface BlogPostProps {
 export default async function BlogPost(props: BlogPostProps) {
   const { lang, uid } = await props.params;
   const client = createClient();
-  console.log("lang", lang, "uid", uid);
   const blogPage = await client.getByUID("blog", uid, {
     lang: lang,
   });
 
-  const locales = await getLocales(blogPage);
+  // const locales = await getLocales(blogPage);
 
   return (
     <>
-      <LanguageSwitcher locales={locales} />
+      {/* <LanguageSwitcher locales={locales} /> */}
       <div className="p-5 flex gap-5">
         <h2>{blogPage.data.blog_title}</h2>
         <Image
@@ -40,8 +39,6 @@ export async function generateStaticParams() {
   const pages = await client.getAllByType("blog", {
     lang: "*",
   });
-
-  console.log(pages.map((page) => ({ uid: page.uid, lang: page.lang })));
 
   return pages.map((page) => ({ uid: page.uid, lang: page.lang }));
 }

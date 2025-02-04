@@ -9,11 +9,13 @@ export async function getLocales(doc?: Content.AllDocumentTypes) {
 
   if (!doc) {
     // Return all repository languages if no document is provided
-    return repository.languages.map((lang) => ({
-      lang: lang.id,
-      url: "",
-      lang_name: lang.name,
-    }));
+    return repository.languages.map((lang) => {
+      return {
+        lang: lang.id,
+        url: "/" + lang.id,
+        lang_name: lang.name,
+      };
+    });
   }
 
   const altDocs = doc.alternate_languages.length
@@ -30,7 +32,6 @@ export async function getLocales(doc?: Content.AllDocumentTypes) {
   return [doc, ...altDocs].map((page) => {
     const lang = repository.languages.find((l) => l.id === page.lang);
 
-    console.log("page", page);
     return {
       lang: lang?.id || "",
       url: page?.url || "",

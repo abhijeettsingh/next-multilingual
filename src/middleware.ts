@@ -10,19 +10,36 @@ export async function middleware(request: NextRequest) {
   const locales = repository.languages.map((lang) => lang.id);
   const defaultLocale = locales[0];
 
-  // Check if there is any supported locale in the pathname
+  // Extract the Accept-Language header from the request
+  const acceptLanguage = request.headers.get("accept-language");
+  console.log("accept-language:", acceptLanguage);
+
+  const userLocale = acceptLanguage
+    ? acceptLanguage.split(",")[0].split(";")[0]?.toLowerCase()
+    : defaultLocale;
+
+  // Find the best match from supported locales
+  const matchedLocale = locales.includes(userLocale)
+    ? userLocale
+    : defaultLocale;
+
+  // Get the current pathname
   const { pathname } = request.nextUrl;
 
+  // Check if the pathname is missing a locale
   const pathnameIsMissingLocale = locales.every(
     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   );
 
-  // Redirect to default locale if there is no supported locale prefix
-  if (pathnameIsMissingLocale) {
-    return NextResponse.rewrite(
-      new URL(`/${defaultLocale}${pathname}`, request.url)
+  // Redirect to the appropriate locale if the locale is missing
+  if (pathnameIsMissingLocale && matchedLocale !== defaultLocale) {
+    return NextResponse.redirect(
+      new URL(`/${matchedLocale}${pathname}`, request.url)
     );
   }
+
+  // If locale is already in the pathname or user preference is defaultLocale , continue
+  return NextResponse.next();
 }
 
 export const config = {
