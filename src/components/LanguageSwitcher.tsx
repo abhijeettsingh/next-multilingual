@@ -50,7 +50,7 @@ export const LanguageSwitcher = ({ locales, lang }: LanguageSwitcherProps) => {
     <div className="flex flex-wrap gap-3 absolute top-5 right-5">
       <span aria-hidden>🌐</span>
       <ul className="flex flex-wrap gap-3">
-        {locales.map((locale, index) => (
+        {locales.map((locale) => (
           <li
             key={locale.lang}
             className={`${lang === locale.lang && "font-bold"}`}
