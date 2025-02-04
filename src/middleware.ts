@@ -36,6 +36,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(`/${matchedLocale}${pathname}`, request.url)
     );
+  } else {
+    return NextResponse.rewrite(
+      new URL(`/${matchedLocale}${pathname}`, request.url)
+    );
   }
 
   // If locale is already in the pathname or user preference is defaultLocale , continue
